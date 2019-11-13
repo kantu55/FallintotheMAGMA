@@ -1,0 +1,155 @@
+■glGenBuffers
+OpenGLが管理するメモリ領域を管理するオブジェクトを作成する関数。
+引数は
+・作成するバッファ・オブジェクトの個数
+・作成したバッファ・オブジェクトを格納する変数へのポインタ
+
+■glBindBuffer
+バッファ・オブジェクトを特定の用途に割り当てる
+この関数の引数に指定できる定数は
+〇GL_ARRAY_BUFFER　→　頂点データ用バッファ
+・GL_ATOMIC_COUNTER_BUFFER　→　排他的に操作されるカウンタ用バッファ
+・GL_COPY_READ_BUFFER　→　コピー操作の読み込み元バッファ
+・GL_COPY_WRITE_BUFFER　→　コピー操作の書き込み元バッファ
+・GL_DISPATCH_INDIRECT_BUFFER　→　コンピュータシェーダーのインダイレクト処理用バッファ
+・GL_DRAW_INDIRECT_BUFFER　→　頂点シェーダーのインダイレクト処理用バッファ
+〇GL_ELEMENT_ARRAY_BUFFER　→　インデックスデータ用バッファ
+・GL_PIXEL_PACK_BUFFER　→　ピクセルデータ読み出し用バッファ
+・GL_PIXEL_UNPACK_BUFFER　→　ピクセルデータ書き出し用バッファ
+・GL_QUERY_BUFFER　→　クエリ処理用バッファ
+・GL_SHEDER_STORAGE_BUFFER　→　シェーダーから読み書きするためのバッファ
+〇GL_TEXTURE_BUFFER　→　テクスチャデータ用バッファ
+・GL_TRANSFORM_FEEDBACK_BUFFER　→　座標変換結果を受け取るためのバッファ
+・GL_UNIFORM_BUFFER　→　uniformデータ用バッファ
+また、glBindBufferの第2引数に「0」を渡すことで割り当てを解除できる
+
+■glBufferData
+バッファ・オブジェクトにデータを転送する関数
+引数は
+・転送先のバッファの用途
+・転送バイト数
+・転送するデータへのポインタ
+・転送先のバッファをどのようにアクセスさせるかに関する「ヒント」を渡す
+OpenGLはこのパラメータによって、バッファが最もパフォーマンスを発揮できるような設定を行う。
+「ヒント」にはバッファへのアクセス頻度およびタイプによって、9種類の定数が定義されている。
+アクセス頻度の種類は以下の通り
+・STREAM　→　バッファは一度だけ転送され、僅かな回数だけ利用される
+・STATIC　→　バッファは一度だけ転送され、何度も利用される
+・DYNAMIC　→　バッファは何度も転送され、何度も利用できる
+アクセスのタイプは以下の通り
+・DRAW　→　バッファはglBufferData等によってアプリケーションから更新され、
+　　　　　　　 OpenGLの描画処理のソースとして使われる
+・READ　→　バッファはOpenGLによって更新され、アプリケーションから読み出される
+・COPY　→　バッファはOpenGLによって更新され、OpenGLの描画処理のソースとして使われる
+
+■glSetVertexAttribPointer
+頂点アトリビュートをバインディング・ポイントをバインドするための関数
+
+■glGenVertexArrays
+VAOを作成するための関数
+
+■glBindVertexArray
+指定されたVAOをOpenGLの「現在の処理対象」に設定するための関数
+
+■glEnableVertexAttribArray
+指定したバインディング・ポイントを有効にする関数
+
+■glDisableVertexAttribArray
+有効になったバインディング・ポイントを無効化する関数
+この関数がないと有効にされたままになる
+
+■glVertexArrayPointer
+頂点アトリビュートをバインディング・ポイントに割り当てる関数
+引数は、
+・バインディング・ポイントのインデックス
+→16箇所あるため0～15のいずれかを指定する
+・情報の要素数
+→「sizeof」を使ってバイト数を求めている
+　float型は4バイトなのでsizeof(float)=4
+　VertexのpositionメンバはVector3型で３つのfloatが含まれている
+　つまり4*3で12となり最終的に12/4で「３」が引数になる
+・情報の型
+→今回は「GL_FLOAT」で指定
+・情報を正規化するかどうか
+→情報が整数だった場合、0～1あるいは-1～+1に変換することを指す
+・頂点データのバイト数
+・「情報が頂点データの先頭から何バイト目にあるか」を設定する
+→C++の2つの機能を使っており、かっこの内側の「offsetof」マクロが重要になっている。
+
+■glCreateShader
+シェーダー・オブジェクトを作成する関数
+
+■glShaderSource
+作成したシェーダー・オブジェクトにシェーダー・プログラムを関連付ける。
+
+■glCompileShader
+関連付けられたシェーダー・プログラムがコンパイルされ、シェーダー・オブジェクトにセットされる。
+
+■glGetShaderiv
+シェーダー・オブジェクトの状態を取得する関数
+GL_COMPILE_STATUSを指定してコンパイル結果を取得している
+GL_INFO_LOG_LENGGTHを指定すると、詳細情報のバイト数を取得することができる
+
+■std::vector::resize
+std::vectorのサイズを変更するための関数
+
+■glCreateProgram
+プログラム・オブジェクトを作成するための関数
+
+■glAttachShader
+シェーダー・オブジェクトをプログラム・オブジェクトに割り当てるための関数
+
+■glLinkProgram
+関数に割り当てたシェーダー・オブジェクト同士をリンクするための関数
+
+■glGetProgramiv
+GL_LINL_STATUSを指定するとリンク結果を取得でき、
+コンパイル失敗のプログラムと同様に、詳細情報を取得して
+その内容を出力している。
+
+■glUseProgram
+描画に使用するプログラム・オブジェクトを設定する関数
+
+■glDrawArrays（頂点データ）
+指定されたオブジェクトやデータを使って図形を描画する関数
+引数は、
+・描画する形状の種類
+・描画を開始する頂点データのインデックス
+・描画する頂点データの数
+
+■glDeleteProgram
+プログラム・オブジェクトを削除する関数
+
+■glDeleteVertexArray
+VAOを削除する関数
+
+■glDrawElements（インデックスデータ）
+glDrawArraysと同じで、インデックスデータの場合に使う関数
+引数は、
+・プリミティブの種類を指定する
+・描画するインデックスの数
+・インデックスの型で
+　「GL_UNSIGNED_BYTE」
+　「GL_UNSIGNED_SHORT」
+　「GL_UNSIGNED_INT」
+　のいずれかを指定する
+・インデックスデータの描画開始オフセットをインデックスデータの
+　先頭からのバイト数(バイトオフセット)で指定する
+
+■glEnable
+OpenGLが持つさまざまな機能を有効にする関数
+引数は、有効にする機能を示す定数
+
+■glDisable
+glEnableの反対で無効にする関数
+
+■GL_DEPTH_TEST
+深度バッファによる奥行きの比較(深度テスト)を示している
+
+■GL_CULL_FACE
+「裏面カリング」という機能を示す定数
+有効になることで裏向きのポリゴンが描画されなくなる
+
+■glDrawErementsBaseVertex
+glDrawErementsの兄弟で追加の引数として、
+「インデックスの0番とみなす頂点データの位置」を設定することが出来る
